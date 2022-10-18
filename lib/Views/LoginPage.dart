@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
               boxShadow: const [
                 BoxShadow(color: Colors.red, blurRadius: 5),
               ]),
-          height: 303,
+          height: 310,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(

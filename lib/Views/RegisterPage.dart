@@ -19,7 +19,7 @@ class RegisterPage extends StatelessWidget {
               BoxShadow(color: Colors.red, blurRadius: 5),
             ],
           ),
-          height: 423,
+          height: 433,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(

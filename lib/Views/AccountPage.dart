@@ -18,9 +18,13 @@ class AccountPage extends StatelessWidget {
           child: Column(
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://ocdn.eu/pulscms-transforms/1/0Z9k9kpTURBXy8xN2U0ZWYwM2EwZWQzYTBkNDE0N2I5N2EzZDBjMGIzMC5qcGeTlQPNBJ9lzQyHzQcMkwXNBLDNAqSTCaYwNThmNTcGgaEwAQ/jaroslaw-kaczynski.jpg"),
-                radius: 100,
+                radius: 110,
+                backgroundColor: Colors.red,
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      "https://ocdn.eu/pulscms-transforms/1/0Z9k9kpTURBXy8xN2U0ZWYwM2EwZWQzYTBkNDE0N2I5N2EzZDBjMGIzMC5qcGeTlQPNBJ9lzQyHzQcMkwXNBLDNAqSTCaYwNThmNTcGgaEwAQ/jaroslaw-kaczynski.jpg"),
+                  radius: 100,
+                ),
               ),
               const Padding(padding: EdgeInsets.only(top: 5)),
               Column(
@@ -46,6 +50,7 @@ class AccountPage extends StatelessWidget {
                       SizedBox(
                         height: 250,
                         child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: 4,
                           itemBuilder: (context, index) {
                             return FieldChangeData(
