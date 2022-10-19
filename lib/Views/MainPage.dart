@@ -13,9 +13,6 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.only(bottom: 20),
-        ),
         Expanded(
           child: ListView.builder(
             itemCount: 5,
@@ -26,8 +23,7 @@ class _MainPageState extends State<MainPage> {
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            EventsPage(nameEvent: "Wydarzenie"),
+                        builder: (context) => EventsPage(),
                       )),
                   child: Card(
                     shape: RoundedRectangleBorder(

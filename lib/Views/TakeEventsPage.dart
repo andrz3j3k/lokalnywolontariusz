@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'EventsPage.dart';
+
 class TakeEventsPage extends StatelessWidget {
   const TakeEventsPage({super.key});
 
@@ -17,11 +19,20 @@ class TakeEventsPage extends StatelessWidget {
               child: ListView.builder(
                 itemCount: 4,
                 itemBuilder: (context, index) {
-                  return Card(
-                    child: ListTile(
-                      title: Text("Moje wydarzenie"),
-                      leading: Icon(Icons.event),
-                      trailing: Text("10.10.2022"),
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EventsPage(),
+                          ));
+                    },
+                    child: Card(
+                      child: ListTile(
+                        title: Text("Moje wydarzenie"),
+                        leading: Icon(Icons.event),
+                        trailing: Text("10.10.2022"),
+                      ),
                     ),
                   );
                 },

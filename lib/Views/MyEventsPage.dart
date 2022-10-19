@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lokalnywolontariusz/Views/AddEvents.dart';
+import 'package:lokalnywolontariusz/Views/EventsPage.dart';
 import 'package:lokalnywolontariusz/Widgets/FieldChangeData.dart';
 
 class MyEventsPage extends StatelessWidget {
@@ -34,11 +35,20 @@ class MyEventsPage extends StatelessWidget {
               child: ListView.builder(
                 itemCount: 4,
                 itemBuilder: (context, index) {
-                  return Card(
-                    child: ListTile(
-                      title: Text("Moje wydarzenie"),
-                      leading: Icon(Icons.event),
-                      trailing: Text("10.10.2022"),
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EventsPage(),
+                          ));
+                    },
+                    child: Card(
+                      child: ListTile(
+                        title: Text("Moje wydarzenie"),
+                        leading: Icon(Icons.event),
+                        trailing: Text("10.10.2022"),
+                      ),
                     ),
                   );
                 },

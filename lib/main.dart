@@ -4,7 +4,7 @@ import 'package:lokalnywolontariusz/Views/AccountPage.dart';
 import 'package:lokalnywolontariusz/Views/LoginPage.dart';
 import 'package:lokalnywolontariusz/Views/MainPage.dart';
 import 'package:lokalnywolontariusz/Views/MyEventsPage.dart';
-import 'package:lokalnywolontariusz/Views/Settings.dart';
+import 'package:lokalnywolontariusz/Views/SettingsPage.dart';
 import 'package:lokalnywolontariusz/Views/TakeEventsPage.dart';
 
 void main() {
