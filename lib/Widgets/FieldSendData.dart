@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
-class FieldChangeData extends StatefulWidget {
-  FieldChangeData({super.key, required this.hideText});
+class FieldSendData extends StatefulWidget {
+  FieldSendData({
+    super.key,
+    required this.hideText,
+  });
   String hideText;
+
   @override
-  State<FieldChangeData> createState() => _FieldChangeDataState();
+  State<FieldSendData> createState() => _FieldSendDataState();
 }
 
-class _FieldChangeDataState extends State<FieldChangeData> {
+class _FieldSendDataState extends State<FieldSendData> {
   late TextEditingController _controller;
 
   @override
@@ -22,6 +26,13 @@ class _FieldChangeDataState extends State<FieldChangeData> {
     super.dispose();
   }
 
+  returnLine() {
+    if (widget.hideText == "Opis") {
+      return 10;
+    }
+    return 1;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -29,6 +40,7 @@ class _FieldChangeDataState extends State<FieldChangeData> {
         padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
         child: SizedBox(
           width: double.infinity,
+          height: 200,
           child: TextField(
             decoration: InputDecoration(
               labelText: widget.hideText,
@@ -41,6 +53,7 @@ class _FieldChangeDataState extends State<FieldChangeData> {
                 borderSide: BorderSide(color: Colors.blueGrey),
               ),
             ),
+            maxLines: returnLine(),
             controller: _controller,
             style: const TextStyle(color: Colors.blueGrey),
             onChanged: (valueTextField) {

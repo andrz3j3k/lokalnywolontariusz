@@ -3,6 +3,9 @@ import 'package:flutter/rendering.dart';
 import 'package:lokalnywolontariusz/Views/AccountPage.dart';
 import 'package:lokalnywolontariusz/Views/LoginPage.dart';
 import 'package:lokalnywolontariusz/Views/MainPage.dart';
+import 'package:lokalnywolontariusz/Views/MyEventsPage.dart';
+import 'package:lokalnywolontariusz/Views/Settings.dart';
+import 'package:lokalnywolontariusz/Views/TakeEventsPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -61,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-              child: Text(
+              child: const Text(
                 'Dominik Gąsior',
                 style: TextStyle(
                   color: Colors.white,
@@ -69,21 +72,42 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            const ListTile(
-              leading: Icon(Icons.event_note),
-              title: Text('Wydarzenia'),
+            ListTile(
+              leading: const Icon(Icons.event_note),
+              title: const Text('Wydarzenia'),
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TakeEventsPage(),
+                  )),
             ),
-            const ListTile(
-              leading: Icon(Icons.event),
-              title: Text('Twoje wydarzenia'),
+            ListTile(
+              leading: const Icon(Icons.event),
+              title: const Text('Twoje wydarzenia'),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MyEventsPage(),
+                ),
+              ),
             ),
-            const ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Ustawienia'),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Ustawienia'),
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsPage(),
+                  )),
             ),
-            const ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text('Wyloguj się'),
+            ListTile(
+              leading: const Icon(Icons.exit_to_app),
+              title: const Text('Wyloguj się'),
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  )),
             ),
           ],
         ),

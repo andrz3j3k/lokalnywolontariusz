@@ -36,7 +36,7 @@ class AccountPage extends StatelessWidget {
               ),
               const Padding(
                   padding: EdgeInsets.only(
-                top: 50,
+                top: 20,
               )),
               Expanded(
                 child: Container(
@@ -48,7 +48,7 @@ class AccountPage extends StatelessWidget {
                         padding: EdgeInsets.only(top: 10),
                       ),
                       SizedBox(
-                        height: 250,
+                        height: 300,
                         child: ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: 4,
