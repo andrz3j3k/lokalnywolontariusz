@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lokalnywolontariusz/Models/Account.dart';
 
 class FieldLoginAndRegister extends StatefulWidget {
   FieldLoginAndRegister({
@@ -26,13 +27,6 @@ class _FieldLoginAndRegisterState extends State<FieldLoginAndRegister> {
     super.dispose();
   }
 
-  isPassword() {
-    if (widget.hideText == "Hasło" || widget.hideText == "Powtórz hasło") {
-      return true;
-    }
-    return false;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -53,7 +47,7 @@ class _FieldLoginAndRegisterState extends State<FieldLoginAndRegister> {
                 borderSide: BorderSide(color: Colors.white),
               ),
             ),
-            obscureText: isPassword(),
+            obscureText: true,
             controller: _controller,
             style: const TextStyle(color: Colors.white),
             onChanged: (valueTextField) {

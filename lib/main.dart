@@ -1,14 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:lokalnywolontariusz/Models/Account.dart';
 import 'package:lokalnywolontariusz/Views/AccountPage.dart';
 import 'package:lokalnywolontariusz/Views/LoginPage.dart';
 import 'package:lokalnywolontariusz/Views/MainPage.dart';
 import 'package:lokalnywolontariusz/Views/MyEventsPage.dart';
 import 'package:lokalnywolontariusz/Views/SettingsPage.dart';
 import 'package:lokalnywolontariusz/Views/TakeEventsPage.dart';
+import 'package:provider/provider.dart';
+
+import 'Providers/Providers.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => Login(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => IsTake(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -48,7 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AccountPage(),
+                  builder: (context) =>
+                      AccountPage(isProfile: true, id: Account.id),
                 ),
               );
             },
@@ -64,9 +81,9 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             DrawerHeader(
               decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-              child: const Text(
-                'Dominik Gąsior',
-                style: TextStyle(
+              child: Text(
+                Account.fullname,
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 24,
                 ),
