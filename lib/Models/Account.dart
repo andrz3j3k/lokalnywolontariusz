@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class AccountPersonality {
   final String fullname;
   final String age;
@@ -37,6 +39,12 @@ class AccountId {
       fullname: json['fullname'] as String,
     );
   }
+}
+
+List<AccountId> parseUsersinEvent(String responseBody) {
+  final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+
+  return parsed.map<AccountId>((json) => AccountId.fromJson(json)).toList();
 }
 
 class Account {

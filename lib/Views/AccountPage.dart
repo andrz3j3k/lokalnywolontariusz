@@ -13,7 +13,6 @@ class AccountPage extends StatelessWidget {
   bool isProfile;
   String id;
 
-  List<String> personality = ["Miasto", "Płeć", "Wiek", "Numer telefonu"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +36,52 @@ class AccountPage extends StatelessWidget {
                     Icons.info,
                   ),
                 )
-              : Container()
+              : IconButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => FutureBuilder(
+                        future: fetchMyEvents(id),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Container();
+                          } else if (snapshot.hasData) {
+                            var list = snapshot.data!;
+                            return ListView.builder(
+                              itemCount: list.length,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => EventsPage(
+                                            id: list[index].id,
+                                            index: index,
+                                          ),
+                                        ));
+                                  },
+                                  child: Card(
+                                    child: ListTile(
+                                      title: Text(list[index].name),
+                                      leading: const Icon(Icons.event),
+                                      trailing: Text(list[index].date),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.event_note,
+                  ),
+                )
         ],
       ),
       body: Padding(
@@ -107,107 +151,110 @@ class AccountPage extends StatelessWidget {
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemCount: date.length,
                                   itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        if (isProfile) {
-                                          showModalBottomSheet(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(30)),
-                                            context: context,
-                                            builder: (context) {
-                                              String data;
-                                              TextEditingController
-                                                  _controller =
-                                                  TextEditingController();
-                                              return SizedBox(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.3,
-                                                child: Center(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 30,
-                                                                right: 30),
-                                                        child: TextField(
-                                                          decoration:
-                                                              InputDecoration(
-                                                            labelText:
-                                                                nameTitle[
-                                                                    index],
-                                                            labelStyle:
-                                                                const TextStyle(
+                                    return SingleChildScrollView(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          if (isProfile) {
+                                            showModalBottomSheet(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          30)),
+                                              context: context,
+                                              builder: (context) {
+                                                String data;
+                                                TextEditingController
+                                                    _controller =
+                                                    TextEditingController();
+                                                return SizedBox(
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.3,
+                                                  child: Center(
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 30,
+                                                                  right: 30),
+                                                          child: TextField(
+                                                            decoration:
+                                                                InputDecoration(
+                                                              labelText:
+                                                                  nameTitle[
+                                                                      index],
+                                                              labelStyle:
+                                                                  const TextStyle(
+                                                                      color: Colors
+                                                                          .blueGrey),
+                                                              border:
+                                                                  const OutlineInputBorder(),
+                                                              enabledBorder:
+                                                                  const OutlineInputBorder(
+                                                                borderSide: BorderSide(
                                                                     color: Colors
                                                                         .blueGrey),
-                                                            border:
-                                                                const OutlineInputBorder(),
-                                                            enabledBorder:
-                                                                const OutlineInputBorder(
-                                                              borderSide: BorderSide(
-                                                                  color: Colors
-                                                                      .blueGrey),
+                                                              ),
+                                                              focusedBorder:
+                                                                  const OutlineInputBorder(
+                                                                borderSide: BorderSide(
+                                                                    color: Colors
+                                                                        .blueGrey),
+                                                              ),
                                                             ),
-                                                            focusedBorder:
-                                                                const OutlineInputBorder(
-                                                              borderSide: BorderSide(
-                                                                  color: Colors
-                                                                      .blueGrey),
-                                                            ),
+                                                            controller:
+                                                                _controller,
+                                                            onChanged: (value) {
+                                                              data = value;
+                                                            },
                                                           ),
-                                                          controller:
-                                                              _controller,
-                                                          onChanged: (value) {
-                                                            data = value;
-                                                          },
                                                         ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                          top: 10,
-                                                        ),
-                                                        child: Button(
-                                                          text: "Zmień",
-                                                          function: () {},
-                                                          backgroundColor:
-                                                              Colors.blueGrey,
-                                                          textColor:
-                                                              Colors.white,
-                                                        ),
-                                                      )
-                                                    ],
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                            top: 10,
+                                                          ),
+                                                          child: Button(
+                                                            text: "Zmień",
+                                                            function: () {},
+                                                            backgroundColor:
+                                                                Colors.blueGrey,
+                                                            textColor:
+                                                                Colors.white,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
                                                   ),
+                                                );
+                                              },
+                                            );
+                                          }
+                                        },
+                                        child: Column(
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                nameTitle[index],
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
                                                 ),
-                                              );
-                                            },
-                                          );
-                                        }
-                                      },
-                                      child: Column(
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              nameTitle[index],
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
+                                                textAlign: TextAlign.start,
                                               ),
-                                              textAlign: TextAlign.start,
                                             ),
-                                          ),
-                                          TextOnEventsPage(
-                                              text: '${date[index]}'),
-                                          const Divider(thickness: 2),
-                                        ],
+                                            TextOnEventsPage(
+                                                text: '${date[index]}'),
+                                            const Divider(thickness: 2),
+                                          ],
+                                        ),
                                       ),
                                     );
                                   },

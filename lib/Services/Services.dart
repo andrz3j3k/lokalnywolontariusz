@@ -31,10 +31,9 @@ Future<EventsPage> fetchEventsPage(id) async {
   return EventsPage.fromJson(jsonDecode(response.body));
 }
 
-Future<List<MyEvents>> fetchMyEvents() async {
+Future<List<MyEvents>> fetchMyEvents(id) async {
   final response = await http.get(
-    Uri.parse(
-        'https://ajlrimlsmg.cfolks.pl/myevents.php?idAccount=${Account.id}'),
+    Uri.parse('https://ajlrimlsmg.cfolks.pl/myevents.php?idAccount=$id'),
   );
   return compute(parseMyEvents, response.body);
 }
@@ -44,4 +43,11 @@ Future<List<MyEvents>> fetchTakeEvents() async {
     Uri.parse('https://ajlrimlsmg.cfolks.pl/takeevents.php?id=${Account.id}'),
   );
   return compute(parseMyEvents, response.body);
+}
+
+Future<List<AccountId>> fetchUsersInEvent(id) async {
+  final response = await http.get(
+    Uri.parse('https://ajlrimlsmg.cfolks.pl/usersinevent.php?id=$id'),
+  );
+  return compute(parseUsersinEvent, response.body);
 }
