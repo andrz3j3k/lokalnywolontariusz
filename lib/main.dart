@@ -118,14 +118,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   )),
             ),
             ListTile(
-              leading: const Icon(Icons.exit_to_app),
-              title: const Text('Wyloguj się'),
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const LoginPage(),
-                  )),
-            ),
+                leading: const Icon(Icons.exit_to_app),
+                title: const Text('Wyloguj się'),
+                onTap: () {
+                  Account.id = "0";
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginPage(),
+                    ),
+                  );
+                }),
           ],
         ),
       ),

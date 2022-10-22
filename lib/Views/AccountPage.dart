@@ -3,8 +3,9 @@ import 'package:lokalnywolontariusz/Services/Services.dart';
 import 'package:lokalnywolontariusz/Views/EventsPage.dart';
 import 'package:lokalnywolontariusz/Widgets/Button.dart';
 import '../Models/Account.dart';
+import 'package:http/http.dart' as http;
 
-class AccountPage extends StatelessWidget {
+class AccountPage extends StatefulWidget {
   AccountPage({
     super.key,
     required this.isProfile,
@@ -14,13 +15,18 @@ class AccountPage extends StatelessWidget {
   String id;
 
   @override
+  State<AccountPage> createState() => _AccountPageState();
+}
+
+class _AccountPageState extends State<AccountPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(isProfile ? "Twój profil" : ""),
+        title: Text(widget.isProfile ? "Twój profil" : ""),
         actions: [
-          isProfile
+          widget.isProfile
               ? IconButton(
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -41,7 +47,7 @@ class AccountPage extends StatelessWidget {
                     showModalBottomSheet(
                       context: context,
                       builder: (context) => FutureBuilder(
-                        future: fetchMyEvents(id),
+                        future: fetchMyEvents(widget.id),
                         builder: (context, snapshot) {
                           if (snapshot.hasError) {
                             return Container();
@@ -88,7 +94,7 @@ class AccountPage extends StatelessWidget {
         padding: const EdgeInsets.only(top: 15),
         child: Center(
           child: FutureBuilder(
-            future: fetchAccountPersonality(id),
+            future: fetchAccountPersonality(widget.id),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Container();
@@ -99,7 +105,7 @@ class AccountPage extends StatelessWidget {
                   list.age,
                   list.city,
                   list.numberPhone,
-                  Account.returnSex(list.sex),
+                  list.sex,
                 ];
                 List nameTitle = [
                   "Imię i nazwisko",
@@ -120,7 +126,7 @@ class AccountPage extends StatelessWidget {
                       ),
                     ),
                     const Padding(padding: EdgeInsets.only(top: 5)),
-                    isProfile
+                    widget.isProfile
                         ? Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -149,12 +155,12 @@ class AccountPage extends StatelessWidget {
                                 padding: const EdgeInsets.only(left: 20),
                                 child: ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: date.length,
+                                  itemCount: nameTitle.length,
                                   itemBuilder: (context, index) {
                                     return SingleChildScrollView(
                                       child: GestureDetector(
                                         onTap: () {
-                                          if (isProfile) {
+                                          if (widget.isProfile) {
                                             showModalBottomSheet(
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:
@@ -162,7 +168,7 @@ class AccountPage extends StatelessWidget {
                                                           30)),
                                               context: context,
                                               builder: (context) {
-                                                String data;
+                                                String data = "";
                                                 TextEditingController
                                                     _controller =
                                                     TextEditingController();
@@ -223,7 +229,63 @@ class AccountPage extends StatelessWidget {
                                                           ),
                                                           child: Button(
                                                             text: "Zmień",
-                                                            function: () {},
+                                                            function: () {
+                                                              if (data != "") {
+                                                                if (checkData(
+                                                                    nameTitle[
+                                                                        index],
+                                                                    data)) {
+                                                                  http.post(
+                                                                    Uri.parse(
+                                                                        'https://ajlrimlsmg.cfolks.pl/updatedataaccount.php?type=${nameTitle[index]}'),
+                                                                    body: {
+                                                                      'id': Account
+                                                                          .id,
+                                                                      'data':
+                                                                          data
+                                                                    },
+                                                                  );
+                                                                  data = "";
+                                                                  _controller
+                                                                      .clear();
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                    SnackBar(
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .red,
+                                                                      content:
+                                                                          Text(
+                                                                        infoTrue(
+                                                                          nameTitle[
+                                                                              index],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                } else {
+                                                                  ScaffoldMessenger.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                    SnackBar(
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .red,
+                                                                      content:
+                                                                          Text(
+                                                                        infoError(
+                                                                          nameTitle[
+                                                                              index],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                }
+                                                              }
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
                                                             backgroundColor:
                                                                 Colors.blueGrey,
                                                             textColor:
@@ -251,7 +313,10 @@ class AccountPage extends StatelessWidget {
                                               ),
                                             ),
                                             TextOnEventsPage(
-                                                text: '${date[index]}'),
+                                              text: date[index] == ""
+                                                  ? "Nie podano"
+                                                  : date[index],
+                                            ),
                                             const Divider(thickness: 2),
                                           ],
                                         ),
@@ -275,5 +340,72 @@ class AccountPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+checkData(type, data) {
+  switch (type) {
+    case "Imię i nazwisko":
+      if (RegExp("([a-zA-Z]+( [a-zA-Z]+)+)").hasMatch(data)) {
+        return true;
+      } else {
+        return false;
+      }
+
+    case "Wiek":
+      if (RegExp("[0-9]").hasMatch(data)) {
+        return true;
+      } else {
+        return false;
+      }
+
+    case "Miasto":
+      if (RegExp("[a-zA-Z]").hasMatch(data)) {
+        return true;
+      } else {
+        return false;
+      }
+    case "Numer telefonu":
+      if (RegExp("[0-9]").hasMatch(data)) {
+        if (data.length == 9) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    case "Płeć":
+      if (RegExp("[a-zA-Z]").hasMatch(data)) {
+        return true;
+      }
+  }
+}
+
+infoError(type) {
+  switch (type) {
+    case "Imię i nazwisko":
+      return "Nieprawidłowe imię i nazwisko";
+    case "Wiek":
+      return "Nieprawidłowy wiek";
+    case "Miasto":
+      return "Nieprawidłowe miasto.";
+    case "Numer telefonu":
+      return "Nieprawidłowy numer telefonu";
+  }
+}
+
+infoTrue(type) {
+  switch (type) {
+    case "Imię i nazwisko":
+      return "Prawidłowa zmiana imięnia i nazwiska!";
+    case "Wiek":
+      return "Prawidłowa zmiana wieku!";
+    case "Miasto":
+      return "Prawidłowa zmiana miasta!";
+    case "Numer telefonu":
+      return "Prawidłowa zmiana numeru telefonu!";
+    case "Płeć":
+      return "Prawidłowa zmiana płci";
   }
 }

@@ -50,11 +50,4 @@ List<AccountId> parseUsersinEvent(String responseBody) {
 class Account {
   static String id = "0";
   static String fullname = "";
-  static returnSex(sex) {
-    if (sex == "0") {
-      return "Męzczyzna";
-    } else {
-      return "Kobieta";
-    }
-  }
 }
