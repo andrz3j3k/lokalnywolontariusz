@@ -43,9 +43,15 @@ class _MainPageState extends State<MainPage> {
                             fit: StackFit.expand,
                             children: [
                               Image.network(
-                                "https://www.sejm.gov.pl/media9.nsf/photos/AZII-C5AHWJ/%24File/RZ1_0057.view.jpg",
+                                'https://ajlrimlsmg.cfolks.pl/${list[index].url}',
                                 fit: BoxFit.cover,
                                 height: double.infinity,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Text(
+                                    'Błąd w trakcie wczytywania zdjęcia!',
+                                    textAlign: TextAlign.center,
+                                  );
+                                },
                               ),
                               Align(
                                 alignment: Alignment.bottomCenter,

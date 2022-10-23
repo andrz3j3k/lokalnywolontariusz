@@ -105,7 +105,7 @@ class MyEventsPage extends StatelessWidget {
                                                                           50,
                                                                       backgroundImage:
                                                                           NetworkImage(
-                                                                              "https://ocdn.eu/pulscms-transforms/1/0Z9k9kpTURBXy8xN2U0ZWYwM2EwZWQzYTBkNDE0N2I5N2EzZDBjMGIzMC5qcGeTlQPNBJ9lzQyHzQcMkwXNBLDNAqSTCaYwNThmNTcGgaEwAQ/jaroslaw-kaczynski.jpg"),
+                                                                              "https://ajlrimlsmg.cfolks.pl/${snapshot.data![index].url}"),
                                                                     ),
                                                                     title: Text(snapshot
                                                                         .data![

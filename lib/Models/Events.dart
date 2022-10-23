@@ -5,12 +5,14 @@ class MainPageEvents {
   final String name;
   final String city;
   final String date;
+  final String url;
 
   MainPageEvents({
     required this.id,
     required this.name,
     required this.date,
     required this.city,
+    required this.url,
   });
   factory MainPageEvents.fromJson(Map<String, dynamic> json) {
     return MainPageEvents(
@@ -18,6 +20,7 @@ class MainPageEvents {
       name: json['name'] as String,
       date: json['date'] as String,
       city: json['city'] as String,
+      url: json['url'] as String,
     );
   }
 }
@@ -40,6 +43,8 @@ class EventsPage {
   final String city;
   final String date;
   final String countAccounts;
+  final String url;
+  final String accountsUrl;
 
   EventsPage({
     required this.id,
@@ -51,6 +56,8 @@ class EventsPage {
     required this.city,
     required this.date,
     required this.countAccounts,
+    required this.url,
+    required this.accountsUrl,
   });
   factory EventsPage.fromJson(Map<String, dynamic> json) {
     return EventsPage(
@@ -63,6 +70,8 @@ class EventsPage {
       city: json['city'] as String,
       date: json['date'] as String,
       countAccounts: json['countAccounts'] as String,
+      url: json['url'] as String,
+      accountsUrl: json['accountsUrl'] as String,
     );
   }
 }

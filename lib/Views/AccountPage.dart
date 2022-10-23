@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lokalnywolontariusz/Services/Services.dart';
 import 'package:lokalnywolontariusz/Views/EventsPage.dart';
 import 'package:lokalnywolontariusz/Widgets/Button.dart';
@@ -19,6 +23,29 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
+  File? imagepath;
+  String? imagename;
+  String? imagedata;
+  Future<void> getImage() async {
+    var getimage = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      imagepath = File(getimage!.path);
+      imagename = getimage.path.split('/').last;
+      imagedata = base64Encode(imagepath!.readAsBytesSync());
+    });
+    uploadEvents();
+  }
+
+  Future<void> uploadEvents() async {
+    String uri = "https://ajlrimlsmg.cfolks.pl/pictureupdate.php";
+    var res = await http.post(Uri.parse(uri), body: {
+      "data": imagedata,
+      "namePhoto": imagename,
+      "idAccount": Account.id,
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,14 +132,12 @@ class _AccountPageState extends State<AccountPage> {
                   list.age,
                   list.city,
                   list.numberPhone,
-                  list.sex,
                 ];
                 List nameTitle = [
                   "Imię i nazwisko",
                   "Wiek",
                   "Miasto",
                   "Numer telefonu",
-                  "Płeć"
                 ];
                 return Column(
                   children: [
@@ -121,7 +146,7 @@ class _AccountPageState extends State<AccountPage> {
                       backgroundColor: Colors.red,
                       child: CircleAvatar(
                         backgroundImage: NetworkImage(
-                            "https://ocdn.eu/pulscms-transforms/1/0Z9k9kpTURBXy8xN2U0ZWYwM2EwZWQzYTBkNDE0N2I5N2EzZDBjMGIzMC5qcGeTlQPNBJ9lzQyHzQcMkwXNBLDNAqSTCaYwNThmNTcGgaEwAQ/jaroslaw-kaczynski.jpg"),
+                            "https://ajlrimlsmg.cfolks.pl/${list.url}"),
                         radius: 100,
                       ),
                     ),
@@ -131,7 +156,9 @@ class _AccountPageState extends State<AccountPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    getImage();
+                                  },
                                   icon: const Icon(Icons.edit)),
                               const Text("Zdjęcie profilowe"),
                             ],
@@ -375,10 +402,6 @@ checkData(type, data) {
       } else {
         return false;
       }
-    case "Płeć":
-      if (RegExp("[a-zA-Z]").hasMatch(data)) {
-        return true;
-      }
   }
 }
 
@@ -405,7 +428,5 @@ infoTrue(type) {
       return "Prawidłowa zmiana miasta!";
     case "Numer telefonu":
       return "Prawidłowa zmiana numeru telefonu!";
-    case "Płeć":
-      return "Prawidłowa zmiana płci";
   }
 }

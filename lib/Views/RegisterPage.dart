@@ -15,7 +15,6 @@ class _RegisterPageState extends State<RegisterPage> {
   late TextEditingController LoginController;
   late TextEditingController PassController;
   late TextEditingController Pass2Controller;
-
   @override
   void initState() {
     super.initState();
@@ -32,6 +31,46 @@ class _RegisterPageState extends State<RegisterPage> {
     FullNameController.dispose();
     Pass2Controller.dispose();
     super.dispose();
+  }
+
+  createAccount() async {
+    final response = await http.post(
+      Uri.parse('https://ajlrimlsmg.cfolks.pl/register.php'),
+      body: {
+        "fullname": FullNameController.text,
+        "email": LoginController.text,
+        "pass": PassController.text,
+      },
+    );
+    if (response.body != "Istnieje juz taki uzytkownik!") {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Konto zostało utworzone pomyślnie!"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      Future.delayed(Duration(seconds: 1));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LoginPage(),
+        ),
+      );
+      FullNameController.text = "";
+      LoginController.text = "";
+      PassController.text = "";
+      Pass2Controller.text = "";
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Istnieje juz taki uzytkownik!"),
+          backgroundColor: Colors.red,
+        ),
+      );
+      LoginController.text = "";
+      PassController.text = "";
+      Pass2Controller.text = "";
+    }
   }
 
   @override
@@ -147,72 +186,42 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       );
                     } else {
-                      if (PassController.text != Pass2Controller.text) {
+                      if (PassController.text.length < 7) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text("Hasła nie są identyczne!"),
+                            content: Text(
+                                "Hasło powinno być dłuzsze! Minimum 8 znaków"),
                             backgroundColor: Colors.red,
                           ),
                         );
                         PassController.text = "";
                         Pass2Controller.text = "";
                       } else {
-                        if (!RegExp(
-                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(LoginController.text)) {
+                        if (PassController.text != Pass2Controller.text) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text("Adres e-mail jest niepoprawny!"),
+                              content: Text("Hasła nie są identyczne!"),
                               backgroundColor: Colors.red,
                             ),
                           );
-                          LoginController.text = "";
                           PassController.text = "";
                           Pass2Controller.text = "";
                         } else {
-                          () async {
-                            final response = await http.post(
-                              Uri.parse(
-                                  'https://ajlrimlsmg.cfolks.pl/register.php'),
-                              body: {
-                                "fullname": FullNameController.text,
-                                "email": LoginController.text,
-                                "pass": PassController.text,
-                              },
+                          if (!RegExp(
+                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              .hasMatch(LoginController.text)) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Adres e-mail jest niepoprawny!"),
+                                backgroundColor: Colors.red,
+                              ),
                             );
-                            if (response.body !=
-                                "Taki uzytkownik juz istnieje!") {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      "Konto zostało utworzone pomyślnie!"),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                              Future.delayed(Duration(seconds: 1));
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const LoginPage(),
-                                ),
-                              );
-                              FullNameController.text = "";
-                              LoginController.text = "";
-                              PassController.text = "";
-                              Pass2Controller.text = "";
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content:
-                                      Text("Taki uzytkownik juz istnieje!"),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                              LoginController.text = "";
-                              PassController.text = "";
-                              Pass2Controller.text = "";
-                            }
-                          };
+                            LoginController.text = "";
+                            PassController.text = "";
+                            Pass2Controller.text = "";
+                          } else {
+                            createAccount();
+                          }
                         }
                       }
                     }

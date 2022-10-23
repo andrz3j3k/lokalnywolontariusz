@@ -29,6 +29,15 @@ class _EventsPageState extends State<EventsPage> {
     }
   }
 
+  addDeleteEvent() async {
+    final response = await http.post(
+        Uri.parse("https://ajlrimlsmg.cfolks.pl/favouriteevent.php"),
+        body: {
+          "idEvents": widget.id,
+          "idAccount": Account.id,
+        });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -50,10 +59,16 @@ class _EventsPageState extends State<EventsPage> {
                   Stack(
                     children: [
                       Image.network(
-                        "https://www.swiatobrazu.pl/zdjecie/artykuly/494201/nikon-d850-sample-01.jpg",
+                        "https://ajlrimlsmg.cfolks.pl/${list.url}",
                         width: double.infinity,
                         height: MediaQuery.of(context).size.height * 0.4,
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Text(
+                            'Błąd w trakcie wczytywania zdjęcia!',
+                            textAlign: TextAlign.center,
+                          );
+                        },
                       ),
                       Container(
                         padding: EdgeInsets.only(
@@ -85,10 +100,13 @@ class _EventsPageState extends State<EventsPage> {
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(40))),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      addDeleteEvent();
+                                      setState(() {});
+                                    },
                                     child: Text(
                                       context.watch<IsTake>().isTake,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.red,
                                       ),
                                     ),
@@ -133,7 +151,8 @@ class _EventsPageState extends State<EventsPage> {
                                   backgroundColor: Colors.red,
                                   child: CircleAvatar(
                                     backgroundImage: NetworkImage(
-                                        "https://ocdn.eu/pulscms-transforms/1/0Z9k9kpTURBXy8xN2U0ZWYwM2EwZWQzYTBkNDE0N2I5N2EzZDBjMGIzMC5qcGeTlQPNBJ9lzQyHzQcMkwXNBLDNAqSTCaYwNThmNTcGgaEwAQ/jaroslaw-kaczynski.jpg"),
+                                      "https://ajlrimlsmg.cfolks.pl/${list.accountsUrl}",
+                                    ),
                                     radius: 25,
                                   ),
                                 ),
