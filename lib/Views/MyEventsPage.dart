@@ -3,6 +3,7 @@ import 'package:lokalnywolontariusz/Services/Services.dart';
 import 'package:lokalnywolontariusz/Views/AccountPage.dart';
 import 'package:lokalnywolontariusz/Views/AddEvents.dart';
 import 'package:lokalnywolontariusz/Views/EventsPage.dart';
+import 'package:lokalnywolontariusz/Widgets/loading.dart';
 
 import '../Models/Account.dart';
 
@@ -35,7 +36,7 @@ class MyEventsPage extends StatelessWidget {
           future: fetchMyEvents(Account.id),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return Container();
+              return const ErrorInternet();
             } else if (snapshot.hasData) {
               var list = snapshot.data!;
               return Column(
@@ -76,7 +77,7 @@ class MyEventsPage extends StatelessWidget {
                                               fetchUsersInEvent(list[index].id),
                                           builder: (context, snapshot) {
                                             if (snapshot.hasError) {
-                                              return Container();
+                                              return const ErrorInternet();
                                             } else if (snapshot.hasData) {
                                               return ListView.builder(
                                                 itemCount:
@@ -149,7 +150,7 @@ class MyEventsPage extends StatelessWidget {
                                                 },
                                               );
                                             } else {
-                                              return Container();
+                                              return const Loading();
                                             }
                                           },
                                         );
@@ -169,7 +170,7 @@ class MyEventsPage extends StatelessWidget {
                 ],
               );
             } else {
-              return Container();
+              return const Loading();
             }
           },
         ),

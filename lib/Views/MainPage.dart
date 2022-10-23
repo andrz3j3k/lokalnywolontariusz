@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lokalnywolontariusz/Services/Services.dart';
 import 'package:lokalnywolontariusz/Views/EventsPage.dart';
+import 'package:lokalnywolontariusz/Widgets/loading.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -20,7 +21,7 @@ class _MainPageState extends State<MainPage> {
             future: fetchMainPageEvents(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Container();
+                return const ErrorInternet();
               } else if (snapshot.hasData) {
                 var list = snapshot.data!;
 
@@ -72,6 +73,8 @@ class _MainPageState extends State<MainPage> {
                                       title: AutoSizeText(
                                         list[index].name,
                                         maxFontSize: 24,
+                                        minFontSize: 10,
+                                        maxLines: 2,
                                         style: const TextStyle(
                                           color: Colors.white,
                                         ),
@@ -98,7 +101,7 @@ class _MainPageState extends State<MainPage> {
                   },
                 );
               } else {
-                return Container();
+                return const Loading();
               }
             },
           ),

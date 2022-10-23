@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lokalnywolontariusz/Services/Services.dart';
+import 'package:lokalnywolontariusz/Widgets/loading.dart';
 
 import 'EventsPage.dart';
 
@@ -17,7 +18,7 @@ class TakeEventsPage extends StatelessWidget {
           future: fetchTakeEvents(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return Container();
+              return const ErrorInternet();
             } else if (snapshot.hasData) {
               var list = snapshot.data!;
               return Column(
@@ -52,7 +53,7 @@ class TakeEventsPage extends StatelessWidget {
                 ],
               );
             } else {
-              return Container();
+              return const Loading();
             }
           },
         ),

@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:lokalnywolontariusz/Services/Services.dart';
 import 'package:lokalnywolontariusz/Views/EventsPage.dart';
 import 'package:lokalnywolontariusz/Widgets/Button.dart';
+import 'package:lokalnywolontariusz/Widgets/loading.dart';
 import '../Models/Account.dart';
 import 'package:http/http.dart' as http;
 
@@ -124,7 +125,7 @@ class _AccountPageState extends State<AccountPage> {
             future: fetchAccountPersonality(widget.id),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Container();
+                return const ErrorInternet();
               } else if (snapshot.hasData) {
                 var list = snapshot.data!;
                 List date = [
@@ -180,156 +181,156 @@ class _AccountPageState extends State<AccountPage> {
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 20),
-                                child: ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: nameTitle.length,
-                                  itemBuilder: (context, index) {
-                                    return SingleChildScrollView(
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          if (widget.isProfile) {
-                                            showModalBottomSheet(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          30)),
-                                              context: context,
-                                              builder: (context) {
-                                                String data = "";
-                                                TextEditingController
-                                                    _controller =
-                                                    TextEditingController();
-                                                return SizedBox(
-                                                  height: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.3,
-                                                  child: Center(
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  left: 30,
-                                                                  right: 30),
-                                                          child: TextField(
-                                                            decoration:
-                                                                InputDecoration(
-                                                              labelText:
-                                                                  nameTitle[
-                                                                      index],
-                                                              labelStyle:
-                                                                  const TextStyle(
-                                                                      color: Colors
-                                                                          .blueGrey),
-                                                              border:
-                                                                  const OutlineInputBorder(),
-                                                              enabledBorder:
-                                                                  const OutlineInputBorder(
-                                                                borderSide: BorderSide(
-                                                                    color: Colors
-                                                                        .blueGrey),
-                                                              ),
-                                                              focusedBorder:
-                                                                  const OutlineInputBorder(
-                                                                borderSide: BorderSide(
-                                                                    color: Colors
-                                                                        .blueGrey),
-                                                              ),
-                                                            ),
-                                                            controller:
-                                                                _controller,
-                                                            onChanged: (value) {
-                                                              data = value;
-                                                            },
-                                                          ),
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                            top: 10,
-                                                          ),
-                                                          child: Button(
-                                                            text: "Zmień",
-                                                            function: () {
-                                                              if (data != "") {
-                                                                if (checkData(
+                                child: SingleChildScrollView(
+                                  child: SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.5,
+                                    child: ListView.builder(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: nameTitle.length,
+                                      itemBuilder: (context, index) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            if (widget.isProfile) {
+                                              showModalBottomSheet(
+                                                context: context,
+                                                builder: (context) {
+                                                  String data = "";
+                                                  TextEditingController
+                                                      _controller =
+                                                      TextEditingController();
+                                                  return SizedBox(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.3,
+                                                    child: Center(
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 30,
+                                                                    right: 30),
+                                                            child: TextField(
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                labelText:
                                                                     nameTitle[
                                                                         index],
-                                                                    data)) {
-                                                                  http.post(
-                                                                    Uri.parse(
-                                                                        'https://ajlrimlsmg.cfolks.pl/updatedataaccount.php?type=${nameTitle[index]}'),
-                                                                    body: {
-                                                                      'id': Account
-                                                                          .id,
-                                                                      'data':
-                                                                          data
-                                                                    },
-                                                                  );
-                                                                  data = "";
-                                                                  _controller
-                                                                      .clear();
-                                                                  ScaffoldMessenger.of(
-                                                                          context)
-                                                                      .showSnackBar(
-                                                                    SnackBar(
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .red,
-                                                                      content:
-                                                                          Text(
-                                                                        infoTrue(
-                                                                          nameTitle[
-                                                                              index],
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                  setState(
-                                                                      () {});
-                                                                } else {
-                                                                  ScaffoldMessenger.of(
-                                                                          context)
-                                                                      .showSnackBar(
-                                                                    SnackBar(
-                                                                      backgroundColor:
-                                                                          Colors
-                                                                              .red,
-                                                                      content:
-                                                                          Text(
-                                                                        infoError(
-                                                                          nameTitle[
-                                                                              index],
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                }
-                                                              }
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                            backgroundColor:
-                                                                Colors.blueGrey,
-                                                            textColor:
-                                                                Colors.white,
+                                                                labelStyle: const TextStyle(
+                                                                    color: Colors
+                                                                        .blueGrey),
+                                                                border:
+                                                                    const OutlineInputBorder(),
+                                                                enabledBorder:
+                                                                    const OutlineInputBorder(
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                          color:
+                                                                              Colors.blueGrey),
+                                                                ),
+                                                                focusedBorder:
+                                                                    const OutlineInputBorder(
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                          color:
+                                                                              Colors.blueGrey),
+                                                                ),
+                                                              ),
+                                                              controller:
+                                                                  _controller,
+                                                              onChanged:
+                                                                  (value) {
+                                                                data = value;
+                                                              },
+                                                            ),
                                                           ),
-                                                        )
-                                                      ],
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                              top: 10,
+                                                            ),
+                                                            child: Button(
+                                                              text: "Zmień",
+                                                              function: () {
+                                                                if (data !=
+                                                                    "") {
+                                                                  if (checkData(
+                                                                      nameTitle[
+                                                                          index],
+                                                                      data)) {
+                                                                    http.post(
+                                                                      Uri.parse(
+                                                                          'https://ajlrimlsmg.cfolks.pl/updatedataaccount.php?type=${nameTitle[index]}'),
+                                                                      body: {
+                                                                        'id': Account
+                                                                            .id,
+                                                                        'data':
+                                                                            data
+                                                                      },
+                                                                    );
+                                                                    data = "";
+                                                                    _controller
+                                                                        .clear();
+                                                                    ScaffoldMessenger.of(
+                                                                            context)
+                                                                        .showSnackBar(
+                                                                      SnackBar(
+                                                                        backgroundColor:
+                                                                            Colors.red,
+                                                                        content:
+                                                                            Text(
+                                                                          infoTrue(
+                                                                            nameTitle[index],
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                    setState(
+                                                                        () {});
+                                                                  } else {
+                                                                    ScaffoldMessenger.of(
+                                                                            context)
+                                                                        .showSnackBar(
+                                                                      SnackBar(
+                                                                        backgroundColor:
+                                                                            Colors.red,
+                                                                        content:
+                                                                            Text(
+                                                                          infoError(
+                                                                            nameTitle[index],
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  }
+                                                                }
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              backgroundColor:
+                                                                  Colors
+                                                                      .blueGrey,
+                                                              textColor:
+                                                                  Colors.white,
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          }
-                                        },
-                                        child: SingleChildScrollView(
+                                                  );
+                                                },
+                                              );
+                                            }
+                                          },
                                           child: Column(
                                             children: [
                                               Align(
@@ -350,10 +351,10 @@ class _AccountPageState extends State<AccountPage> {
                                               const Divider(thickness: 2),
                                             ],
                                           ),
-                                        ),
-                                      ),
-                                    );
-                                  },
+                                        );
+                                      },
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -364,7 +365,7 @@ class _AccountPageState extends State<AccountPage> {
                   ],
                 );
               } else {
-                return Container();
+                return const Loading();
               }
             },
           ),
