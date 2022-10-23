@@ -19,7 +19,7 @@ class _AddEventsState extends State<AddEvents> {
   late TextEditingController _controllerNazwaWydarzenia;
   late TextEditingController _controllerOpis;
   late TextEditingController _controllerMiejsceWydarzenia;
-  late var date;
+  var date;
 
   @override
   void initState() {
@@ -40,6 +40,7 @@ class _AddEventsState extends State<AddEvents> {
   File? imagepath;
   String? imagename;
   String? imagedata;
+  bool isImage = false;
   Future<void> getImage() async {
     var getimage = await ImagePicker().pickImage(source: ImageSource.gallery);
 
@@ -48,6 +49,7 @@ class _AddEventsState extends State<AddEvents> {
       imagename = getimage.path.split('/').last;
       imagedata = base64Encode(imagepath!.readAsBytesSync());
     });
+    isImage = true;
   }
 
   Future<void> uploadEvents() async {
@@ -61,6 +63,13 @@ class _AddEventsState extends State<AddEvents> {
       "city": _controllerMiejsceWydarzenia.text,
       "date": date.toString(),
     });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Udało się dodać nowe wydarzenie!"),
+        backgroundColor: Colors.red,
+      ),
+    );
+    Navigator.pop(context);
   }
 
   @override
@@ -164,7 +173,20 @@ class _AddEventsState extends State<AddEvents> {
               Button(
                 text: "Dodaj wydarzenie",
                 function: () {
-                  uploadEvents();
+                  if (_controllerNazwaWydarzenia.text != "" &&
+                      _controllerOpis.text != "" &&
+                      _controllerMiejsceWydarzenia.text != "" &&
+                      isImage == true &&
+                      date != null) {
+                    uploadEvents();
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("Wypełnij wszystkie pola!"),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
                 },
                 backgroundColor: Colors.red,
                 textColor: Colors.white,

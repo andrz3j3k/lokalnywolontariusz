@@ -291,6 +291,8 @@ class _AccountPageState extends State<AccountPage> {
                                                                       ),
                                                                     ),
                                                                   );
+                                                                  setState(
+                                                                      () {});
                                                                 } else {
                                                                   ScaffoldMessenger.of(
                                                                           context)
@@ -327,25 +329,27 @@ class _AccountPageState extends State<AccountPage> {
                                             );
                                           }
                                         },
-                                        child: Column(
-                                          children: [
-                                            Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                nameTitle[index],
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  nameTitle[index],
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  textAlign: TextAlign.start,
                                                 ),
-                                                textAlign: TextAlign.start,
                                               ),
-                                            ),
-                                            TextOnEventsPage(
-                                              text: date[index] == ""
-                                                  ? "Nie podano"
-                                                  : date[index],
-                                            ),
-                                            const Divider(thickness: 2),
-                                          ],
+                                              TextOnEventsPage(
+                                                text: date[index] == ""
+                                                    ? "Nie podano"
+                                                    : date[index],
+                                              ),
+                                              const Divider(thickness: 2),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     );
