@@ -61,12 +61,6 @@ class _AddEventsState extends State<AddEvents> {
       "city": _controllerMiejsceWydarzenia.text,
       "date": date.toString(),
     });
-    var response = jsonDecode(res.body);
-    if (response["success"] == "true") {
-      print("uploaded");
-    } else {
-      print("error");
-    }
   }
 
   @override

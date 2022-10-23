@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lokalnywolontariusz/Services/Services.dart';
 import 'package:lokalnywolontariusz/Views/EventsPage.dart';
@@ -68,10 +69,12 @@ class _MainPageState extends State<MainPage> {
                                         color: Colors.white,
                                         size: 30,
                                       ),
-                                      title: Text(
+                                      title: AutoSizeText(
                                         list[index].name,
+                                        maxFontSize: 24,
                                         style: const TextStyle(
-                                            color: Colors.white, fontSize: 24),
+                                          color: Colors.white,
+                                        ),
                                       ),
                                       trailing: Text(
                                         list[index].date,
